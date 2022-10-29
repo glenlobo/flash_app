@@ -1,41 +1,61 @@
 import random
+import time
 from tkinter import Tk, Canvas, PhotoImage, Button
 
 import pandas as pandas
 
 BACKGROUND_COLOR = "#B1DDC6"
 
+df = pandas.read_csv('./data/french_words.csv')
+data_list = df.to_dict('records')
+current_word = {}
+
+
+def next_word():
+    global current_word, flip_timer
+    window.after_cancel(flip_timer)
+    current_word = random.choice(data_list)
+    print(current_word['French'])
+    canvas.itemconfig(tile_text, text='French', fill='black')
+    canvas.itemconfig(word_text, text=current_word['French'], fill='black')
+    canvas.itemconfig(card_background, image=card_front)
+    flip_timer = window.after(3000, english_word)
+
+
+def english_word():
+    global current_word
+    canvas.itemconfig(tile_text, text='English', fill='white')
+    canvas.itemconfig(word_text, text=current_word['English'], fill='white')
+    canvas.itemconfig(card_background, image=card_back)
+
 
 window = Tk()
 window.title('Flash Card')
 window.config(padx=50, pady=50, bg=BACKGROUND_COLOR)
 
+flip_timer = window.after(3000, english_word)
+
 canvas = Canvas(width=800, height=526)
 card_front = PhotoImage(file='./images/card_front.png')
 card_back = PhotoImage(file='./images/card_back.png')
-canvas.create_image(400, 263, image=card_front)
+card_background = canvas.create_image(400, 263, image=card_front)
 tile_text = canvas.create_text(400, 150, text='Title', font=('Ariel', 40, "italic"))
 word_text = canvas.create_text(400, 263, text='word', font=('Ariel', 60, 'bold'))
 
 canvas.config(bg=BACKGROUND_COLOR, highlightthickness=0)
 canvas.grid(row=0, column=0, columnspan=2)
 
-df = pandas.read_csv('./data/french_words.csv')
-data_list = df.to_dict('records')
-
-index = random.randint(0, 100)
-print(f"{data_list[index]['French'] = }")
-canvas.itemconfig(tile_text, text='French')
-canvas.itemconfig(word_text, text=data_list[index]['French'])
-
 
 wrong_image = PhotoImage(file="images/wrong.png")
-wrong_button = Button(image=wrong_image, highlightthickness=0)
+wrong_button = Button(image=wrong_image, highlightthickness=0, command=next_word)
 wrong_button.grid(row=1, column=0)
 
 right_image = PhotoImage(file="images/right.png")
-right_button = Button(image=right_image, highlightthickness=0)
+right_button = Button(image=right_image, highlightthickness=0, command=next_word)
 right_button.grid(row=1, column=1)
+
+next_word()
+
 
 
 window.mainloop()
