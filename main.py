@@ -1,6 +1,5 @@
 import random
 from tkinter import Tk, Canvas, PhotoImage, Button
-
 import pandas as pandas
 
 BACKGROUND_COLOR = "#B1DDC6"
@@ -20,7 +19,6 @@ def next_word():
     global current_word, flip_timer
     window.after_cancel(flip_timer)
     current_word = random.choice(to_learn)
-    print(current_word['French'])
     canvas.itemconfig(tile_text, text='French', fill='black')
     canvas.itemconfig(word_text, text=current_word['French'], fill='black')
     canvas.itemconfig(card_background, image=card_front)
@@ -36,7 +34,6 @@ def english_word():
 
 def is_known():
     to_learn.remove(current_word)
-    print(len(to_learn))
     data_frame = pandas.DataFrame(to_learn)
     data_frame.to_csv("./data/words_to_learn.csv", index=False)
     next_word()
@@ -68,5 +65,4 @@ right_button = Button(image=right_image, highlightthickness=0, command=is_known)
 right_button.grid(row=1, column=1)
 
 next_word()
-
 window.mainloop()
