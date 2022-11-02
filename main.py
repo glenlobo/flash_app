@@ -1,12 +1,11 @@
 import random
-import time
 from tkinter import Tk, Canvas, PhotoImage, Button
 
 import pandas as pandas
 
 BACKGROUND_COLOR = "#B1DDC6"
 current_word = {}
-to_learn ={}
+to_learn = {}
 
 try:
     data = pandas.read_csv('./data/words_to_learn.csv')
@@ -38,9 +37,10 @@ def english_word():
 def is_known():
     to_learn.remove(current_word)
     print(len(to_learn))
-    data = pandas.DataFrame(to_learn)
-    data.to_csv("./data/words_to_learn.csv", index=False)
+    data_frame = pandas.DataFrame(to_learn)
+    data_frame.to_csv("./data/words_to_learn.csv", index=False)
     next_word()
+
 
 window = Tk()
 window.title('Flash Card')
@@ -68,7 +68,5 @@ right_button = Button(image=right_image, highlightthickness=0, command=is_known)
 right_button.grid(row=1, column=1)
 
 next_word()
-
-
 
 window.mainloop()
