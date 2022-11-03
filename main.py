@@ -55,7 +55,6 @@ word_text = canvas.create_text(400, 263, text='word', font=('Ariel', 60, 'bold')
 canvas.config(bg=BACKGROUND_COLOR, highlightthickness=0)
 canvas.grid(row=0, column=0, columnspan=2)
 
-
 wrong_image = PhotoImage(file="images/wrong.png")
 wrong_button = Button(image=wrong_image, highlightthickness=0, command=next_word)
 wrong_button.grid(row=1, column=0)
